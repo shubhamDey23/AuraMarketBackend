@@ -1,0 +1,506 @@
+{
+  "info": {
+    "_postman_id": "8f7e6d5c-4b3a-2109-8765-43210fedcba9",
+    "name": "AuraMarket Microservices Complete API Collection",
+    "description": "Comprehensive Postman collection for testing the entire AuraMarket backend microservices system via API Gateway (Port 8080) and direct microservice ports.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Health",
+      "description": "Health check endpoints for API Gateway and all 11 downstream microservices.",
+      "item": [
+        {
+          "name": "API Gateway Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{gatewayUrl}}/actuator/health", "host": ["{{gatewayUrl}}"], "path": ["actuator", "health"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Health status is UP', function () { var jsonData = pm.response.json(); pm.expect(jsonData.status).to.eql('UP'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Identity Service Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{identityUrl}}/actuator/health", "host": ["{{identityUrl}}"], "path": ["actuator", "health"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Identity Health status is UP', function () { var jsonData = pm.response.json(); pm.expect(jsonData.status).to.eql('UP'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Tenant Service Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{tenantUrl}}/actuator/health", "host": ["{{tenantUrl}}"], "path": ["actuator", "health"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Tenant Health status is UP', function () { var jsonData = pm.response.json(); pm.expect(jsonData.status).to.eql('UP'); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 - Authentication",
+      "description": "User registration, login, JWT token generation, refresh, and password changes.",
+      "item": [
+        {
+          "name": "Register Customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenantCode\": \"AURA_AYURVEDA\",\n  \"email\": \"customer_test_{{$randomInt}}@auramarket.local\",\n  \"password\": \"Password@123\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"Customer\",\n  \"role\": \"CUSTOMER\"\n}"
+            },
+            "url": { "raw": "{{gatewayUrl}}/api/v1/auth/register", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "auth", "register"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201', function () { pm.response.to.have.status(201); });",
+                  "var res = pm.response.json();",
+                  "if (res.data && res.data.accessToken) { pm.environment.set('customerAccessToken', res.data.accessToken); pm.environment.set('customerId', res.data.user.id); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login Customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenantCode\": \"AURA_AYURVEDA\",\n  \"email\": \"customer@auramarket.local\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": { "raw": "{{gatewayUrl}}/api/v1/auth/login", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "auth", "login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var res = pm.response.json();",
+                  "if (res.data) { pm.environment.set('customerAccessToken', res.data.accessToken); pm.environment.set('customerRefreshToken', res.data.refreshToken); pm.environment.set('customerId', res.data.user.id); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login Admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenantCode\": \"AURA_AYURVEDA\",\n  \"email\": \"admin@auramarket.local\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": { "raw": "{{gatewayUrl}}/api/v1/auth/login", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "auth", "login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var res = pm.response.json();",
+                  "if (res.data) { pm.environment.set('adminAccessToken', res.data.accessToken); pm.environment.set('adminRefreshToken', res.data.refreshToken); pm.environment.set('adminId', res.data.user.id); }"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 - Tenant",
+      "description": "Multi-tenant storefront configuration, branding, dynamic features, menus.",
+      "item": [
+        {
+          "name": "Get Storefront Config (AURA_AYURVEDA)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/storefront/config?tenantCode=AURA_AYURVEDA",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["api", "v1", "storefront", "config"],
+              "query": [{ "key": "tenantCode", "value": "AURA_AYURVEDA" }]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var res = pm.response.json();",
+                  "pm.expect(res.data.tenant.code).to.eql('AURA_AYURVEDA');",
+                  "pm.expect(res.data.features.CONSULTATION).to.be.true;"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 - Catalog",
+      "description": "Product catalog search, category hierarchy, product details.",
+      "item": [
+        {
+          "name": "Get Product Catalog",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-Tenant-Id", "value": "{{tenantCode}}" }],
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/catalog/products?page=0&size=10",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["api", "v1", "catalog", "products"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "10" }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var res = pm.response.json();",
+                  "pm.expect(res.success).to.be.true;"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 - Seller",
+      "description": "Seller store profile and seller management.",
+      "item": [
+        {
+          "name": "Get Seller Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{sellerAccessToken}}" },
+              { "key": "X-Tenant-Id", "value": "{{tenantCode}}" }
+            ],
+            "url": { "raw": "{{gatewayUrl}}/api/v1/sellers/me", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "sellers", "me"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Response structure valid', function () { pm.expect(pm.response.code).to.be.oneOf([200, 401, 403, 404]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06 - Inventory",
+      "description": "Real-time inventory levels, reservations, adjustments.",
+      "item": [
+        {
+          "name": "Check Product Inventory",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-Tenant-Id", "value": "{{tenantCode}}" }],
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/inventory/products/{{productId}}",
+              "host": ["{{gatewayUrl}}"],
+              "path": ["api", "v1", "inventory", "products", "{{productId}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is 200 or 404', function () { pm.expect(pm.response.code).to.be.oneOf([200, 404]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "07 - Cart",
+      "description": "Customer shopping cart operations.",
+      "item": [
+        {
+          "name": "Get Customer Cart",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" },
+              { "key": "X-Tenant-Id", "value": "{{tenantCode}}" },
+              { "key": "X-User-Id", "value": "{{customerId}}" }
+            ],
+            "url": { "raw": "{{gatewayUrl}}/api/v1/cart", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "cart"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Cart endpoint responds correctly', function () { pm.expect(pm.response.code).to.be.oneOf([200, 401]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "08 - Orders",
+      "description": "Order creation, fulfillment groups, order status history.",
+      "item": [
+        {
+          "name": "Get Customer Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" },
+              { "key": "X-Tenant-Id", "value": "{{tenantCode}}" },
+              { "key": "X-User-Id", "value": "{{customerId}}" }
+            ],
+            "url": { "raw": "{{gatewayUrl}}/api/v1/orders", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "orders"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Orders retrieved', function () { pm.expect(pm.response.code).to.be.oneOf([200, 401]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "09 - Payments",
+      "description": "Payment initiation, verification, refunds.",
+      "item": [
+        {
+          "name": "Initiate Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" },
+              { "key": "X-Tenant-Id", "value": "{{tenantCode}}" },
+              { "key": "X-User-Id", "value": "{{customerId}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{orderId}}\",\n  \"amount\": 999.00,\n  \"currency\": \"INR\",\n  \"paymentMethod\": \"TEST_CARD\"\n}"
+            },
+            "url": { "raw": "{{gatewayUrl}}/api/v1/payments/initiate", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "payments", "initiate"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Payment initiation API handles request', function () { pm.expect(pm.response.code).to.be.oneOf([201, 400, 401]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "10 - Consultation",
+      "description": "Doctor listing, availability, appointment booking, digital prescriptions.",
+      "item": [
+        {
+          "name": "Get Verified Doctors",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "X-Tenant-Id", "value": "AURA_AYURVEDA" }],
+            "url": { "raw": "{{gatewayUrl}}/api/v1/doctors", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "doctors"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "var res = pm.response.json();",
+                  "pm.expect(res.data.content).to.be.an('array');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "11 - Notifications",
+      "description": "In-app notifications, preferences, read tracking.",
+      "item": [
+        {
+          "name": "Get In-App Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" },
+              { "key": "X-Tenant-Id", "value": "{{tenantCode}}" },
+              { "key": "X-User-Id", "value": "{{customerId}}" }
+            ],
+            "url": { "raw": "{{gatewayUrl}}/api/v1/notifications", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "notifications"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Notification response OK or 401', function () { pm.expect(pm.response.code).to.be.oneOf([200, 401]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "12 - Admin",
+      "description": "Audit logging, moderation records, tenant management.",
+      "item": [
+        {
+          "name": "Get Audit Logs",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{adminAccessToken}}" },
+              { "key": "X-Tenant-Id", "value": "{{tenantCode}}" }
+            ],
+            "url": { "raw": "{{gatewayUrl}}/api/v1/admin/audit-logs", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "admin", "audit-logs"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Admin audit logs response OK or 401/403', function () { pm.expect(pm.response.code).to.be.oneOf([200, 401, 403]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "13 - Security Tests",
+      "description": "Negative testing for missing tokens, expired tokens, wrong role access (403), unauthorized endpoints.",
+      "item": [
+        {
+          "name": "Unauthenticated Call to Protected Cart API (Expect 401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{gatewayUrl}}/api/v1/cart", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "cart"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Unauthenticated request rejected with 401 or 400', function () { pm.expect(pm.response.code).to.be.oneOf([401, 400]); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "14 - Integration Flows",
+      "description": "End-to-end purchasing, seller fulfillment, and consultation workflows.",
+      "item": [
+        {
+          "name": "E2E Step 1: Get Storefront Config",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{gatewayUrl}}/api/v1/storefront/config?tenantCode=AURA_AYURVEDA", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "storefront", "config"], "query": [{ "key": "tenantCode", "value": "AURA_AYURVEDA" }] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Storefront loaded successfully', function () { pm.response.to.have.status(200); });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

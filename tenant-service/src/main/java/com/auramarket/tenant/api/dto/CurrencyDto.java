@@ -1,0 +1,19 @@
+package com.auramarket.tenant.api.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class CurrencyDto implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private String code;
+    private String locale;
+}
