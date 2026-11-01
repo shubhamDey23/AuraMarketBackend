@@ -16,7 +16,8 @@ identity:
   jwt:
     issuer: auramarket-identity
     audience: auramarket-api
-    secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+    # Override with JWT_SECRET. This fallback is intentionally not suitable for production.
+    secret: ${JWT_SECRET:local-dev-only-change-this-secret-before-running}
     access-token-expiration-ms: ${JWT_ACCESS_TOKEN_EXPIRATION:900000} # 15 minutes
     refresh-token-expiration-ms: ${JWT_REFRESH_TOKEN_EXPIRATION:604800000} # 7 days
   google:
@@ -29,7 +30,7 @@ management:
         include: health,info,metrics,prometheus
   endpoint:
     health:
-      show-details: always
+      show-details: when_authorized
 
 springdoc:
   api-docs:
