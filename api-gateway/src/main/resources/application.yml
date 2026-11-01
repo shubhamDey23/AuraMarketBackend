@@ -10,12 +10,13 @@ spring:
         cors-configurations:
           '[/**]':
             allowedOrigins:
-              - "http://localhost:4200"
+              - "${FRONTEND_ORIGIN:http://localhost:4200}"
               - "http://localhost:8080"
             allowedMethods:
               - GET
               - POST
               - PUT
+              - PATCH
               - DELETE
               - OPTIONS
             allowedHeaders: "*"
@@ -30,6 +31,27 @@ spring:
           uri: ${TENANT_SERVICE_URL:http://localhost:8082}
           predicates:
             - Path=/api/v1/storefront/**, /api/v1/tenants/**, /api/v1/admin/tenants/**
+
+        # Specific routes must precede the catch-all admin route.
+        - id: seller-catalogue
+          uri: ${CATALOG_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/api/v1/seller/products/**
+
+        - id: admin-catalogue
+          uri: ${CATALOG_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/api/v1/admin/catalog/**
+
+        - id: admin-inventory
+          uri: ${INVENTORY_SERVICE_URL:http://localhost:8085}
+          predicates:
+            - Path=/api/v1/admin/inventory/**
+
+        - id: admin-orders
+          uri: ${ORDER_SERVICE_URL:http://localhost:8087}
+          predicates:
+            - Path=/api/v1/admin/orders/**
 
         - id: catalog-service
           uri: ${CATALOG_SERVICE_URL:http://localhost:8083}
