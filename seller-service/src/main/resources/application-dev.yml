@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/auramarket_seller}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/auramarket_seller}
     username: ${SPRING_DATASOURCE_USERNAME:auramarket_user}
-    password: ${SPRING_DATASOURCE_PASSWORD:auramarket_secure_password_2026}
+    password: ${SPRING_DATASOURCE_PASSWORD:local_dev_only_change_me}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
