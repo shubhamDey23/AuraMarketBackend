@@ -45,6 +45,10 @@ public class Category {
     @Column(name = "is_active")
     private Boolean isActive = true;
 
+    @Builder.Default
+    @Column(name = "is_featured", nullable = false)
+    private Boolean isFeatured = false;
+
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
