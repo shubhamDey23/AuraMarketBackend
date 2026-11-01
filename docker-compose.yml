@@ -14,18 +14,18 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: auramarket-postgres
-    restart: always
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: auramarket_user
-      POSTGRES_PASSWORD: auramarket_secure_password_2026
-      POSTGRES_DB: auramarket_tenant
+      POSTGRES_USER: ${POSTGRES_USER:-auramarket_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_dev_only_change_me}
+      POSTGRES_DB: postgres
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./infrastructure/postgres/init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
+      - ./infrastructure/postgres/init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U auramarket_user -d auramarket_tenant"]
+      test: ["CMD-SHELL", "pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}""]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -35,9 +35,9 @@ services:
   redis:
     image: redis:7.2-alpine
     container_name: auramarket-redis
-    restart: always
+    restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -51,7 +51,7 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.0
     container_name: auramarket-zookeeper
-    restart: always
+    restart: unless-stopped
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -65,16 +65,16 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.6.0
     container_name: auramarket-kafka
-    restart: always
+    restart: unless-stopped
     depends_on:
       - zookeeper
     ports:
-      - "9092:9092"
+      - "${KAFKA_HOST_PORT:-9092}:9092"
       - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:${KAFKA_HOST_PORT:-9092}
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -87,9 +87,9 @@ services:
   kafka-ui:
     image: provectuslabs/kafka-ui:v0.7.1
     container_name: auramarket-kafka-ui
-    restart: always
+    restart: unless-stopped
     ports:
-      - "8089:8080"
+      - "${KAFKA_UI_PORT:-8092}:8080"
     environment:
       KAFKA_CLUSTERS_0_NAME: auramarket-cluster
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
