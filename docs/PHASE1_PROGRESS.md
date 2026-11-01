@@ -15,7 +15,8 @@ Branch: `feature/phase-1-api-integration`
 - Updated the root README's port/password details and linked the development guide.
 - Added Flyway migration and DTO/entity fields for featured/trending products and featured categories/brands.
 - Added public catalogue search, featured, trending, and discounted-product filters; public browsing is forced to ACTIVE products.
-- Added Postman requests for required tenant-scoped catalog listing, search, featured/trending/discounted products, categories, and brands.
+- Added tenant-scoped admin and seller product-list endpoints that include non-active statuses for management screens.
+- Added Postman requests for required tenant-scoped catalog listing, search, featured/trending/discounted products, categories, brands, and admin/seller listings.
 
 ## Verification status
 
@@ -27,7 +28,7 @@ Branch: `feature/phase-1-api-integration`
 ## Next backend work
 
 1. Add and verify tenant-scoped admin/seller catalogue listing and product-status management.
-2. Verify controller routes and gateway paths against the Postman collection.
+2. Add tests for new catalogue filters/listing APIs and verify controller routes and gateway paths against the Postman collection.
 3. Review authorization and tenant isolation for admin and seller endpoints.
 4. Complete/verify database seed scripts and all API integration flows.
 5. Add service containers and health/dependency ordering to Docker Compose after local service configuration is verified.
