@@ -93,6 +93,26 @@ public class CatalogService {
     }
 
     @Transactional(readOnly = true)
+    public PageResponse<ProductDto> getSellerProducts(String tenantId, UUID sellerId, int page, int size) {
+        int safePage = Math.max(0, page);
+        int safeSize = Math.min(Math.max(1, size), 100);
+        Pageable pageable = PageRequest.of(safePage, safeSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
+        Page<ProductDto> result = productRepository.findByTenantIdAndSellerId(tenantId, sellerId, pageable)
+                .map(this::mapToProductDto);
+        return PageResponse.fromPage(result);
+    }
+
+    @Transactional(readOnly = true)
+    public PageResponse<ProductDto> getAdminProducts(String tenantId, int page, int size) {
+        int safePage = Math.max(0, page);
+        int safeSize = Math.min(Math.max(1, size), 100);
+        Pageable pageable = PageRequest.of(safePage, safeSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
+        Specification<Product> spec = (root, query, cb) -> cb.equal(root.get("tenantId"), tenantId);
+        Page<ProductDto> result = productRepository.findAll(spec, pageable).map(this::mapToProductDto);
+        return PageResponse.fromPage(result);
+    }
+
+    @Transactional(readOnly = true)
     public ProductDto getProductById(UUID id, String tenantId) {
         ProductDto cached = cacheService.getProductById(tenantId, id);
         if (cached != null) return cached;
