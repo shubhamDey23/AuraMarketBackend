@@ -24,6 +24,17 @@ public class SellerCatalogController {
 
     private final CatalogService catalogService;
 
+    @GetMapping
+    @Operation(summary = "List Seller Products", description = "Lists all statuses of products scoped to a tenant and seller")
+    public ResponseEntity<ApiResponse<com.auramarket.catalog.api.dto.PageResponse<ProductDto>>> getSellerProducts(
+            @RequestParam String tenantId,
+            @RequestParam UUID sellerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        var response = catalogService.getSellerProducts(tenantId, sellerId, page, size);
+        return ResponseEntity.ok(ApiResponse.success(response, "Seller products retrieved successfully"));
+    }
+
     @PostMapping
     @Operation(summary = "Create Product", description = "Creates a new product listing pending moderation")
     public ResponseEntity<ApiResponse<ProductDto>> createProduct(@Valid @RequestBody CreateProductRequest request) {
