@@ -670,6 +670,60 @@
               }
             }
           ]
+        },
+        {
+          "name": "List Seller Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/seller/products?tenantId={{tenantId}}&sellerId={{sellerId}}&page=0&size=20",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "seller",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "sellerId",
+                  "value": "{{sellerId}}"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.expect(pm.response.json().success).to.be.true;"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -997,6 +1051,57 @@
                   "pm.test('Admin audit logs response OK or 401/403', function () { pm.expect(pm.response.code).to.be.oneOf([200, 401, 403]); });"
                 ],
                 "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Tenant Catalog Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/admin/catalog/products?tenantId={{tenantId}}&page=0&size=20",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "catalog",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.expect(pm.response.json().success).to.be.true;"
+                ]
               }
             }
           ]
