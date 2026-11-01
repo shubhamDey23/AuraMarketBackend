@@ -36,21 +36,24 @@ public class CatalogService {
     @Transactional(readOnly = true)
     public PageResponse<ProductDto> getProducts(String tenantId, UUID categoryId, UUID subcategoryId, UUID brandId,
                                                 UUID sellerId, BigDecimal minPrice, BigDecimal maxPrice,
-                                                ProductStatus status, int page, int size, String sortBy, String sortDir) {
+                                                ProductStatus status, String search, Boolean isFeatured,
+                                                Boolean isTrending, Boolean hasDiscount,
+                                                int page, int size, String sortBy, String sortDir) {
+        if (minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0) {
+            throw new CatalogException("minPrice cannot be greater than maxPrice", "INVALID_PRICE_RANGE");
+        }
 
-        Sort sort = Sort.by(Sort.Direction.fromString(sortDir != null ? sortDir : "DESC"),
-                sortBy != null ? sortBy : "createdAt");
-        Pageable pageable = PageRequest.of(page, size, sort);
+        int safePage = Math.max(0, page);
+        int safeSize = Math.min(Math.max(1, size), 100);
+        List<String> sortableFields = List.of("createdAt", "updatedAt", "name", "price", "discountPrice");
+        String safeSortBy = sortableFields.contains(sortBy) ? sortBy : "createdAt";
+        Sort.Direction direction = "ASC".equalsIgnoreCase(sortDir) ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(safePage, safeSize, Sort.by(direction, safeSortBy));
 
         Specification<Product> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.equal(root.get("tenantId"), tenantId));
-
-            if (status != null) {
-                predicates.add(cb.equal(root.get("status"), status));
-            } else {
-                predicates.add(cb.equal(root.get("status"), ProductStatus.ACTIVE));
-            }
+            predicates.add(cb.equal(root.get("status"), status != null ? status : ProductStatus.ACTIVE));
 
             if (categoryId != null) predicates.add(cb.equal(root.get("categoryId"), categoryId));
             if (subcategoryId != null) predicates.add(cb.equal(root.get("subcategoryId"), subcategoryId));
@@ -58,14 +61,35 @@ public class CatalogService {
             if (sellerId != null) predicates.add(cb.equal(root.get("sellerId"), sellerId));
             if (minPrice != null) predicates.add(cb.greaterThanOrEqualTo(root.get("price"), minPrice));
             if (maxPrice != null) predicates.add(cb.lessThanOrEqualTo(root.get("price"), maxPrice));
-
+            if (Boolean.TRUE.equals(isFeatured)) predicates.add(cb.isTrue(root.get("isFeatured")));
+            if (Boolean.TRUE.equals(isTrending)) predicates.add(cb.isTrue(root.get("isTrending")));
+            if (Boolean.TRUE.equals(hasDiscount)) {
+                predicates.add(cb.isNotNull(root.get("discountPrice")));
+                predicates.add(cb.lessThan(root.get("discountPrice"), root.get("price")));
+            }
+            if (search != null && !search.isBlank()) {
+                String pattern = "%" + search.trim().toLowerCase() + "%";
+                predicates.add(cb.or(
+                        cb.like(cb.lower(root.get("name")), pattern),
+                        cb.like(cb.lower(root.get("slug")), pattern),
+                        cb.like(cb.lower(root.get("sku")), pattern),
+                        cb.like(cb.lower(root.get("description")), pattern)
+                ));
+            }
             return cb.and(predicates.toArray(new Predicate[0]));
         };
 
-        Page<Product> productsPage = productRepository.findAll(spec, pageable);
-        Page<ProductDto> dtoPage = productsPage.map(this::mapToProductDto);
-
+        Page<ProductDto> dtoPage = productRepository.findAll(spec, pageable).map(this::mapToProductDto);
         return PageResponse.fromPage(dtoPage);
+    }
+
+    // Retained for existing internal callers and tests.
+    @Transactional(readOnly = true)
+    public PageResponse<ProductDto> getProducts(String tenantId, UUID categoryId, UUID subcategoryId, UUID brandId,
+                                                UUID sellerId, BigDecimal minPrice, BigDecimal maxPrice,
+                                                ProductStatus status, int page, int size, String sortBy, String sortDir) {
+        return getProducts(tenantId, categoryId, subcategoryId, brandId, sellerId, minPrice, maxPrice,
+                status, null, null, null, null, page, size, sortBy, sortDir);
     }
 
     @Transactional(readOnly = true)
@@ -257,6 +281,8 @@ public class CatalogService {
                 .imagesJson(product.getImagesJson())
                 .attributesJson(product.getAttributesJson())
                 .tagsJson(product.getTagsJson())
+                .isFeatured(product.getIsFeatured())
+                .isTrending(product.getIsTrending())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
                 .build();
@@ -273,6 +299,7 @@ public class CatalogService {
                 .icon(category.getIcon())
                 .displayOrder(category.getDisplayOrder())
                 .isActive(category.getIsActive())
+                .isFeatured(category.getIsFeatured())
                 .build();
     }
 
@@ -285,6 +312,7 @@ public class CatalogService {
                 .description(brand.getDescription())
                 .logoUrl(brand.getLogoUrl())
                 .isActive(brand.getIsActive())
+                .isFeatured(brand.getIsFeatured())
                 .build();
     }
 }
