@@ -21,4 +21,5 @@ public class CategoryDto {
     private String icon;
     private Integer displayOrder;
     private Boolean isActive;
+    private Boolean isFeatured;
 }
