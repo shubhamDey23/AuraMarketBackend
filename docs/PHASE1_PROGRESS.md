@@ -13,6 +13,9 @@ Branch: `feature/phase-1-api-integration`
 - Removed the hardcoded JWT signing-secret fallback and changed actuator health detail visibility to `when_authorized`.
 - Added `docs/DEVELOPMENT_GUIDE.md` with prerequisites, infrastructure startup, service startup, health checks, testing, and current limitations.
 - Updated the root README's port/password details and linked the development guide.
+- Added Flyway migration and DTO/entity fields for featured/trending products and featured categories/brands.
+- Added public catalogue search, featured, trending, and discounted-product filters; public browsing is forced to ACTIVE products.
+- Added Postman requests for required tenant-scoped catalog listing, search, featured/trending/discounted products, categories, and brands.
 
 ## Verification status
 
@@ -23,7 +26,7 @@ Branch: `feature/phase-1-api-integration`
 
 ## Next backend work
 
-1. Finish catalogue API support for dynamic storefront filtering and admin/seller listing.
+1. Add and verify tenant-scoped admin/seller catalogue listing and product-status management.
 2. Verify controller routes and gateway paths against the Postman collection.
 3. Review authorization and tenant isolation for admin and seller endpoints.
 4. Complete/verify database seed scripts and all API integration flows.
