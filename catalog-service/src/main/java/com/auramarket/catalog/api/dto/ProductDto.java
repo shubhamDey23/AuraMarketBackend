@@ -35,6 +35,8 @@ public class ProductDto {
     private String imagesJson;
     private String attributesJson;
     private String tagsJson;
+    private Boolean isFeatured;
+    private Boolean isTrending;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
 }
