@@ -32,14 +32,17 @@ public class CatalogController {
             @RequestParam(required = false) UUID sellerId,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
-            @RequestParam(required = false) ProductStatus status,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Boolean isFeatured,
+            @RequestParam(required = false) Boolean isTrending,
+            @RequestParam(required = false) Boolean hasDiscount,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "DESC") String sortDir) {
 
         PageResponse<ProductDto> response = catalogService.getProducts(tenantId, categoryId, subcategoryId, brandId,
-                sellerId, minPrice, maxPrice, status, page, size, sortBy, sortDir);
+                sellerId, minPrice, maxPrice, ProductStatus.ACTIVE, search, isFeatured, isTrending, hasDiscount, page, size, sortBy, sortDir);
         return ResponseEntity.ok(ApiResponse.success(response, "Products retrieved successfully"));
     }
 
