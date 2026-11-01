@@ -15,7 +15,16 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": { "raw": "{{gatewayUrl}}/actuator/health", "host": ["{{gatewayUrl}}"], "path": ["actuator", "health"] }
+            "url": {
+              "raw": "{{gatewayUrl}}/actuator/health",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
           },
           "event": [
             {
@@ -35,7 +44,16 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": { "raw": "{{identityUrl}}/actuator/health", "host": ["{{identityUrl}}"], "path": ["actuator", "health"] }
+            "url": {
+              "raw": "{{identityUrl}}/actuator/health",
+              "host": [
+                "{{identityUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
           },
           "event": [
             {
@@ -54,7 +72,16 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": { "raw": "{{tenantUrl}}/actuator/health", "host": ["{{tenantUrl}}"], "path": ["actuator", "health"] }
+            "url": {
+              "raw": "{{tenantUrl}}/actuator/health",
+              "host": [
+                "{{tenantUrl}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
           },
           "event": [
             {
@@ -78,12 +105,28 @@
           "name": "Register Customer",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"tenantCode\": \"AURA_AYURVEDA\",\n  \"email\": \"customer_test_{{$randomInt}}@auramarket.local\",\n  \"password\": \"Password@123\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"Customer\",\n  \"role\": \"CUSTOMER\"\n}"
             },
-            "url": { "raw": "{{gatewayUrl}}/api/v1/auth/register", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "auth", "register"] }
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/auth/register",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            }
           },
           "event": [
             {
@@ -103,12 +146,28 @@
           "name": "Login Customer",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"tenantCode\": \"AURA_AYURVEDA\",\n  \"email\": \"customer@auramarket.local\",\n  \"password\": \"Password@123\"\n}"
             },
-            "url": { "raw": "{{gatewayUrl}}/api/v1/auth/login", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "auth", "login"] }
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/auth/login",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
           },
           "event": [
             {
@@ -128,12 +187,28 @@
           "name": "Login Admin",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"tenantCode\": \"AURA_AYURVEDA\",\n  \"email\": \"admin@auramarket.local\",\n  \"password\": \"Password@123\"\n}"
             },
-            "url": { "raw": "{{gatewayUrl}}/api/v1/auth/login", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "auth", "login"] }
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/auth/login",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
           },
           "event": [
             {
@@ -162,9 +237,21 @@
             "header": [],
             "url": {
               "raw": "{{gatewayUrl}}/api/v1/storefront/config?tenantCode=AURA_AYURVEDA",
-              "host": ["{{gatewayUrl}}"],
-              "path": ["api", "v1", "storefront", "config"],
-              "query": [{ "key": "tenantCode", "value": "AURA_AYURVEDA" }]
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "storefront",
+                "config"
+              ],
+              "query": [
+                {
+                  "key": "tenantCode",
+                  "value": "AURA_AYURVEDA"
+                }
+              ]
             }
           },
           "event": [
@@ -192,14 +279,36 @@
           "name": "Get Product Catalog",
           "request": {
             "method": "GET",
-            "header": [{ "key": "X-Tenant-Id", "value": "{{tenantCode}}" }],
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              }
+            ],
             "url": {
-              "raw": "{{gatewayUrl}}/api/v1/catalog/products?page=0&size=10",
-              "host": ["{{gatewayUrl}}"],
-              "path": ["api", "v1", "catalog", "products"],
+              "raw": "{{gatewayUrl}}/api/v1/catalog/products?tenantId={{tenantId}}&page=0&size=10",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "catalog",
+                "products"
+              ],
               "query": [
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "10" }
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
               ]
             }
           },
@@ -216,6 +325,306 @@
               }
             }
           ]
+        },
+        {
+          "name": "Search Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/catalog/products?tenantId={{tenantId}}&search={{productSearch}}&page=0&size=10",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "catalog",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "search",
+                  "value": "{{productSearch}}"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.expect(pm.response.json().success).to.be.true;"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Featured Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/catalog/products?tenantId={{tenantId}}&isFeatured=true&page=0&size=10",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "catalog",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "isFeatured",
+                  "value": "true"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.expect(pm.response.json().success).to.be.true;"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Trending Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/catalog/products?tenantId={{tenantId}}&isTrending=true&page=0&size=10",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "catalog",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "isTrending",
+                  "value": "true"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.expect(pm.response.json().success).to.be.true;"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Discounted Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/catalog/products?tenantId={{tenantId}}&hasDiscount=true&page=0&size=10",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "catalog",
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                },
+                {
+                  "key": "hasDiscount",
+                  "value": "true"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.expect(pm.response.json().success).to.be.true;"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/catalog/categories?tenantId={{tenantId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "catalog",
+                "categories"
+              ],
+              "query": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.expect(pm.response.json().success).to.be.true;"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Brands",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/catalog/brands?tenantId={{tenantId}}",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "catalog",
+                "brands"
+              ],
+              "query": [
+                {
+                  "key": "tenantId",
+                  "value": "{{tenantId}}"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.expect(pm.response.json().success).to.be.true;"
+                ]
+              }
+            }
+          ]
         }
       ]
     },
@@ -228,10 +637,27 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{sellerAccessToken}}" },
-              { "key": "X-Tenant-Id", "value": "{{tenantCode}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{sellerAccessToken}}"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              }
             ],
-            "url": { "raw": "{{gatewayUrl}}/api/v1/sellers/me", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "sellers", "me"] }
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/sellers/me",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "sellers",
+                "me"
+              ]
+            }
           },
           "event": [
             {
@@ -255,11 +681,24 @@
           "name": "Check Product Inventory",
           "request": {
             "method": "GET",
-            "header": [{ "key": "X-Tenant-Id", "value": "{{tenantCode}}" }],
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              }
+            ],
             "url": {
               "raw": "{{gatewayUrl}}/api/v1/inventory/products/{{productId}}",
-              "host": ["{{gatewayUrl}}"],
-              "path": ["api", "v1", "inventory", "products", "{{productId}}"]
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "inventory",
+                "products",
+                "{{productId}}"
+              ]
             }
           },
           "event": [
@@ -285,11 +724,30 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" },
-              { "key": "X-Tenant-Id", "value": "{{tenantCode}}" },
-              { "key": "X-User-Id", "value": "{{customerId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{customerId}}"
+              }
             ],
-            "url": { "raw": "{{gatewayUrl}}/api/v1/cart", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "cart"] }
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/cart",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cart"
+              ]
+            }
           },
           "event": [
             {
@@ -314,11 +772,30 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" },
-              { "key": "X-Tenant-Id", "value": "{{tenantCode}}" },
-              { "key": "X-User-Id", "value": "{{customerId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{customerId}}"
+              }
             ],
-            "url": { "raw": "{{gatewayUrl}}/api/v1/orders", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "orders"] }
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/orders",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "orders"
+              ]
+            }
           },
           "event": [
             {
@@ -343,16 +820,39 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" },
-              { "key": "X-Tenant-Id", "value": "{{tenantCode}}" },
-              { "key": "X-User-Id", "value": "{{customerId}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{customerId}}"
+              }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"orderId\": \"{{orderId}}\",\n  \"amount\": 999.00,\n  \"currency\": \"INR\",\n  \"paymentMethod\": \"TEST_CARD\"\n}"
             },
-            "url": { "raw": "{{gatewayUrl}}/api/v1/payments/initiate", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "payments", "initiate"] }
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/payments/initiate",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                "initiate"
+              ]
+            }
           },
           "event": [
             {
@@ -376,8 +876,23 @@
           "name": "Get Verified Doctors",
           "request": {
             "method": "GET",
-            "header": [{ "key": "X-Tenant-Id", "value": "AURA_AYURVEDA" }],
-            "url": { "raw": "{{gatewayUrl}}/api/v1/doctors", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "doctors"] }
+            "header": [
+              {
+                "key": "X-Tenant-Id",
+                "value": "AURA_AYURVEDA"
+              }
+            ],
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/doctors",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "doctors"
+              ]
+            }
           },
           "event": [
             {
@@ -404,11 +919,30 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{customerAccessToken}}" },
-              { "key": "X-Tenant-Id", "value": "{{tenantCode}}" },
-              { "key": "X-User-Id", "value": "{{customerId}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{customerAccessToken}}"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{customerId}}"
+              }
             ],
-            "url": { "raw": "{{gatewayUrl}}/api/v1/notifications", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "notifications"] }
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/notifications",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications"
+              ]
+            }
           },
           "event": [
             {
@@ -433,10 +967,27 @@
           "request": {
             "method": "GET",
             "header": [
-              { "key": "Authorization", "value": "Bearer {{adminAccessToken}}" },
-              { "key": "X-Tenant-Id", "value": "{{tenantCode}}" }
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminAccessToken}}"
+              },
+              {
+                "key": "X-Tenant-Id",
+                "value": "{{tenantCode}}"
+              }
             ],
-            "url": { "raw": "{{gatewayUrl}}/api/v1/admin/audit-logs", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "admin", "audit-logs"] }
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/admin/audit-logs",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "audit-logs"
+              ]
+            }
           },
           "event": [
             {
@@ -461,7 +1012,17 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": { "raw": "{{gatewayUrl}}/api/v1/cart", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "cart"] }
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/cart",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "cart"
+              ]
+            }
           },
           "event": [
             {
@@ -486,7 +1047,24 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": { "raw": "{{gatewayUrl}}/api/v1/storefront/config?tenantCode=AURA_AYURVEDA", "host": ["{{gatewayUrl}}"], "path": ["api", "v1", "storefront", "config"], "query": [{ "key": "tenantCode", "value": "AURA_AYURVEDA" }] }
+            "url": {
+              "raw": "{{gatewayUrl}}/api/v1/storefront/config?tenantCode=AURA_AYURVEDA",
+              "host": [
+                "{{gatewayUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "storefront",
+                "config"
+              ],
+              "query": [
+                {
+                  "key": "tenantCode",
+                  "value": "AURA_AYURVEDA"
+                }
+              ]
+            }
           },
           "event": [
             {
