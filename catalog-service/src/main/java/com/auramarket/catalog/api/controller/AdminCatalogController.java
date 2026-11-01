@@ -20,6 +20,16 @@ public class AdminCatalogController {
 
     private final CatalogService catalogService;
 
+    @GetMapping
+    @Operation(summary = "List Tenant Products", description = "Lists products in all statuses for back-office moderation")
+    public ResponseEntity<ApiResponse<com.auramarket.catalog.api.dto.PageResponse<ProductDto>>> getAdminProducts(
+            @RequestParam String tenantId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        var response = catalogService.getAdminProducts(tenantId, page, size);
+        return ResponseEntity.ok(ApiResponse.success(response, "Catalog products retrieved successfully"));
+    }
+
     @PutMapping("/{id}/approve")
     @Operation(summary = "Approve Product", description = "Approves a pending product for storefront display")
     public ResponseEntity<ApiResponse<ProductDto>> approveProduct(
