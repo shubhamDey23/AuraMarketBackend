@@ -37,10 +37,10 @@ docker compose up -d
 ```
 
 ### Infrastructure Endpoints
-- **PostgreSQL**: `localhost:5432` (user: `auramarket_user`, password: `auramarket_secure_password_2026`)
+- **PostgreSQL**: `localhost:5432` (user: `auramarket_user`, password: `local_dev_only_change_me`)
 - **Redis**: `localhost:6379`
 - **Kafka**: `localhost:9092`
-- **Kafka UI**: `http://localhost:8089`
+- **Kafka UI**: `http://localhost:8092`
 
 ---
 
@@ -137,3 +137,7 @@ Detailed architectural specs are stored in the `/docs` folder:
 - [Database-per-Service Rules](file:///E:/AuraMarket/AuraMarket_backend/docs/architecture/database-per-service.md)
 - [Kafka Event Architecture](file:///E:/AuraMarket/AuraMarket_backend/docs/events/kafka-events.md)
 - [DSA Practicals](file:///E:/AuraMarket/AuraMarket_backend/docs/dsa/README.md)
+
+## Current Startup Guide
+
+For the full local startup sequence, required tools, environment configuration, service-by-service Maven commands, health checks, and known limitations, see [docs/DEVELOPMENT_GUIDE.md](docs/DEVELOPMENT_GUIDE.md). The root Docker Compose file starts infrastructure only; Spring Boot services are currently started separately.
