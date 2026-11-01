@@ -79,6 +79,14 @@ public class Product {
     @Column(name = "tags_json", columnDefinition = "TEXT")
     private String tagsJson;
 
+    @Builder.Default
+    @Column(name = "is_featured", nullable = false)
+    private Boolean isFeatured = false;
+
+    @Builder.Default
+    @Column(name = "is_trending", nullable = false)
+    private Boolean isTrending = false;
+
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
